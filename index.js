@@ -23,7 +23,8 @@ function harmonCheerio(handler) {
 
     readStreamAsString(rs)
       .then((html) => {
-        const nodeName = html.substring(1, Math.min(html.indexOf(' '), html.indexOf('>')));
+        const nodeName = html.substring(1, Math.min(
+          html.indexOf('\n'), html.indexOf(' '), html.indexOf('>')));
         const $ = cheerio.load(html);
         const element = $(nodeName).eq(0);
         return Promise.all([
