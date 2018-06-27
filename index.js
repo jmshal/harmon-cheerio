@@ -16,6 +16,15 @@ function readStreamAsString(stream) {
   });
 }
 
+function getRootNodeName(html) {
+  const indexes = [
+    html.indexOf('\n'),
+    html.indexOf(' '),
+    html.indexOf('>'),
+  ].filter(i => i !== -1);
+  return html.substring(1, Math.min(...indexes));
+}
+
 function harmonCheerio(handler) {
   return function(node, req, res) {
     const rs = node.createReadStream({outer: true});
@@ -23,8 +32,7 @@ function harmonCheerio(handler) {
 
     readStreamAsString(rs)
       .then((html) => {
-        const nodeName = html.substring(1, Math.min(
-          html.indexOf('\n'), html.indexOf(' '), html.indexOf('>')));
+        const nodeName = getRootNodeName(html);
         const $ = cheerio.load(html);
         const element = $(nodeName).eq(0);
         return Promise.all([
